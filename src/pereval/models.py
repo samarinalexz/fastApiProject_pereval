@@ -32,7 +32,7 @@ status = Table(
     metadata,
     Column('id', Integer, primary_key=True),
     Column('name', String, nullable=False),
-    Column('permissions', JSON)
+    Column('permissions', JSON, default='new')
 )
 
 

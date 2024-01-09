@@ -1,9 +1,11 @@
 import datetime
+import enum
 
 from sqlalchemy import (Table, Column, Integer, String, MetaData, TIMESTAMP, ForeignKey, Boolean, Float, DateTime, Text,
-                        LargeBinary)
+                        LargeBinary, Enum, types, JSON)
 
 metadata = MetaData()
+
 
 users_table = Table(
     "users",
@@ -20,7 +22,6 @@ users_table = Table(
     ),
 )
 
-
 coords = Table(
     'coords',
     metadata,
@@ -28,6 +29,15 @@ coords = Table(
     Column("latitude", Float),
     Column("longitude", Float),
     Column("height", Integer),
+)
+
+
+status = Table(
+    'status',
+    metadata,
+    Column('id', Integer, primary_key=True),
+    Column('name', String, nullable=False),
+    Column('permissions', JSON)
 )
 
 
@@ -47,9 +57,11 @@ pereval_added = Table(
     Column("level_spring", Text()),
     Column("date_added", TIMESTAMP, default=datetime.datetime.utcnow),
     Column("coords_id", ForeignKey(coords.c.id)),
+    Column('status_id', Integer,ForeignKey(status.c.id), nullable=False),
     Column(
         "connect",
         Boolean(),
+        default=False,
         nullable=False,
     ),
 )

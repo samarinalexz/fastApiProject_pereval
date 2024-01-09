@@ -4,9 +4,18 @@ import datetime
 from sqlalchemy import (Table, Column, Integer, String, MetaData, TIMESTAMP, ForeignKey, Boolean, Float, DateTime, Text,
                         LargeBinary, JSON)
 
-from src.auth.models import user
-
 metadata = MetaData()
+
+user = Table(
+    "user",
+    metadata,
+   Column("id", Integer, primary_key=True),
+    Column("email", String, unique=True, index=True, nullable=False),
+    Column("username", String, nullable=False),
+    Column("hashed_password", String(), nullable=False),
+    Column("phone", String(20)),
+    Column("is_active", Boolean, nullable=False),
+)
 
 coords = Table(
     'coords',

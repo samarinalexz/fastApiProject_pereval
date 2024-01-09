@@ -8,6 +8,22 @@ from src.auth.models import user
 
 metadata = MetaData()
 
+def get_status_list():
+
+    status_list = (
+        ('New', 'New'),
+        ('Accepted', 'Accepted'),
+        ('Pending', 'Pending'),
+        ('Rejected', 'Rejected'),
+    )
+
+    return status_list
+
+
+def get_new_status():
+
+    return 'New'
+
 coords = Table(
     'coords',
     metadata,

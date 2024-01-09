@@ -1,26 +1,12 @@
 import datetime
-import enum
+
 
 from sqlalchemy import (Table, Column, Integer, String, MetaData, TIMESTAMP, ForeignKey, Boolean, Float, DateTime, Text,
-                        LargeBinary, Enum, types, JSON)
+                        LargeBinary, JSON)
+
+from src.auth.models import user
 
 metadata = MetaData()
-
-
-users_table = Table(
-    "users",
-    metadata,
-   Column("id", Integer, primary_key=True),
-    Column("email", String(40), unique=True, index=True, nullable=False),
-    Column("name", String(100), nullable=False),
-    Column("password", String(), nullable=False),
-    Column("phone", String(100)),
-    Column(
-        "is_active",
-        Boolean(),
-        nullable=False,
-    ),
-)
 
 coords = Table(
     'coords',
@@ -45,7 +31,7 @@ pereval_added = Table(
     "pereval_added",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("user_id", ForeignKey(users_table.c.id)),
+    Column("user_id", ForeignKey(user.c.id)),
     Column("add_time", DateTime()),
     Column("title", String(100)),
     Column("other_titles", String(100)),
@@ -57,7 +43,7 @@ pereval_added = Table(
     Column("level_spring", Text()),
     Column("date_added", TIMESTAMP, default=datetime.datetime.utcnow),
     Column("coords_id", ForeignKey(coords.c.id)),
-    Column('status_id', Integer,ForeignKey(status.c.id), nullable=False),
+    Column('status_id', Integer, ForeignKey(status.c.id), nullable=False),
     Column(
         "connect",
         Boolean(),

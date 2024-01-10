@@ -1,8 +1,8 @@
 """Database create
 
-Revision ID: 6b8a4f57e46e
+Revision ID: 7d1df189e2ce
 Revises: 
-Create Date: 2024-01-09 18:20:42.330265
+Create Date: 2024-01-10 21:15:09.371055
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '6b8a4f57e46e'
+revision: str = '7d1df189e2ce'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -30,33 +30,32 @@ def upgrade() -> None:
     op.create_table('pereval_areas',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('id_parent', sa.Integer(), nullable=True),
-    sa.Column('title', sa.String(length=100), nullable=True),
+    sa.Column('title', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('pereval_images',
-    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('date_added', sa.TIMESTAMP(), nullable=True),
     sa.Column('img', sa.LargeBinary(), nullable=True),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('spr_activities_type',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('title', sa.String(length=100), nullable=True),
+    sa.Column('title', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('status',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(), nullable=False),
+    sa.Column('name', sa.String(), nullable=True),
     sa.Column('permissions', sa.JSON(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('email', sa.String(), nullable=False),
-    sa.Column('username', sa.String(), nullable=False),
-    sa.Column('hashed_password', sa.String(), nullable=False),
-    sa.Column('phone', sa.String(length=20), nullable=True),
-    sa.Column('is_active', sa.Boolean(), nullable=False),
+    sa.Column('email', sa.String(), nullable=True),
+    sa.Column('username', sa.String(), nullable=True),
+    sa.Column('phone', sa.String(), nullable=True),
+    sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_user_email'), 'user', ['email'], unique=True)
@@ -64,28 +63,30 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('add_time', sa.DateTime(), nullable=True),
-    sa.Column('title', sa.String(length=100), nullable=True),
-    sa.Column('other_titles', sa.String(length=100), nullable=True),
-    sa.Column('beauty_title', sa.String(length=100), nullable=True),
+    sa.Column('title', sa.String(), nullable=True),
+    sa.Column('other_titles', sa.String(), nullable=True),
+    sa.Column('beauty_title', sa.String(), nullable=True),
     sa.Column('content', sa.Text(), nullable=True),
     sa.Column('level_winter', sa.Text(), nullable=True),
     sa.Column('level_summer', sa.Text(), nullable=True),
     sa.Column('level_autumn', sa.Text(), nullable=True),
     sa.Column('level_spring', sa.Text(), nullable=True),
     sa.Column('date_added', sa.TIMESTAMP(), nullable=True),
-    sa.Column('coords_id', sa.Integer(), nullable=True),
-    sa.Column('status_id', sa.Integer(), nullable=False),
+    sa.Column('coords', sa.Integer(), nullable=True),
+    sa.Column('status', sa.Integer(), nullable=True),
     sa.Column('connect', sa.Boolean(), nullable=False),
-    sa.ForeignKeyConstraint(['coords_id'], ['coords.id'], ),
-    sa.ForeignKeyConstraint(['status_id'], ['status.id'], ),
+    sa.ForeignKeyConstraint(['coords'], ['coords.id'], ),
+    sa.ForeignKeyConstraint(['status'], ['status.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('pereval_added_images',
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('image_id', sa.Integer(), nullable=True),
     sa.Column('pereval_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['image_id'], ['pereval_images.id'], ),
-    sa.ForeignKeyConstraint(['pereval_id'], ['pereval_added.id'], )
+    sa.ForeignKeyConstraint(['pereval_id'], ['pereval_added.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
 
